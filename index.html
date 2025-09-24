@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metode Pembayaran - Dist Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .payment-method:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .payment-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .payment-title img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .payment-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .payment-details {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+        }
+
+        .qris-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .qris-thumbnail {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .qris-thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal untuk QRIS */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .fee-list {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .fee-list h2 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .fee-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fee-item:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .payment-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .copy-btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Metode Pembayaran</h1>
+    
+    <div class="container">
+        <!-- Dana -->
+        <div class="payment-method">
+            <div class="payment-title">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="Dana">
+                <h2>Dana</h2>
+            </div>
+            <div class="payment-info">
+                <div class="payment-details">
+                    <p><strong>Nomor:</strong> 081973379998</p>
+                    <p><strong>A.N:</strong> HUMINSA</p>
+                </div>
+                <button class="copy-btn" data-number="081973379998">Salin Nomor</button>
+            </div>
+        </div>
+        
+        <!-- Gopay -->
+        <div class="payment-method">
+            <div class="payment-title">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="Gopay">
+                <h2>Gopay</h2>
+            </div>
+            <div class="payment-info">
+                <div class="payment-details">
+                    <p><strong>Nomor:</strong> 083112073428</p>
+                    <p><strong>A.N:</strong> DIST SHOP</p>
+                </div>
+                <button class="copy-btn" data-number="083112073428">Salin Nomor</button>
+            </div>
+        </div>
+        
+        <!-- Seabank -->
+        <div class="payment-method">
+            <div class="payment-title">
+                <img src="https://seeklogo.com/images/S/seabank-logo-57A8F9A3A9-seeklogo.com.png" alt="Seabank">
+                <h2>Seabank</h2>
+            </div>
+            <div class="payment-info">
+                <div class="payment-details">
+                    <p><strong>Nomor:</strong> 901945195886</p>
+                    <p><strong>A.N:</strong> TIURMA</p>
+                </div>
+                <button class="copy-btn" data-number="901945195886">Salin Nomor</button>
+            </div>
+        </div>
+        
+        <!-- QRIS -->
+        <div class="payment-method">
+            <div class="payment-title">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QRIS">
+                <h2>QRIS</h2>
+            </div>
+            <div class="payment-info">
+                <div class="payment-details">
+                    <p>Scan kode QRIS berikut untuk pembayaran</p>
+                </div>
+            </div>
+            <div class="qris-container">
+                <img src="https://img1.pixhost.to/images/8900/643460860_zion.jpg" alt="QR Code" class="qris-thumbnail" id="qrisThumbnail">
+            </div>
+        </div>
+        
+        <!-- Modal QRIS -->
+        <div id="qrisModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="qrisFullSize" src="https://img1.pixhost.to/images/8900/643460860_zion.jpg" alt="QR Code Full Size">
+        </div>
+        
+        <!-- Daftar Fee -->
+        <div class="fee-list">
+            <h2>List Fee Mc By Dist Store</h2>
+            <div class="fee-item">
+                <span>1k - 29k</span>
+                <span>= 1k</span>
+            </div>
+            <div class="fee-item">
+                <span>30k - 99k</span>
+                <span>= 2k</span>
+            </div>
+            <div class="fee-item">
+                <span>100k - 200k</span>
+                <span>= 4k</span>
+            </div>
+            <div class="fee-item">
+                <span>201k - 300k</span>
+                <span>= 5k</span>
+            </div>
+            <div class="fee-item">
+                <span>301k - 499k</span>
+                <span>= 7k</span>
+            </div>
+            <div class="fee-item">
+                <span>500k - 1jt+</span>
+                <span>= 10k</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menyalin nomor ke clipboard
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const number = this.getAttribute('data-number');
+                navigator.clipboard.writeText(number).then(() => {
+                    // Ubah teks tombol sementara
+                    const originalText = this.textContent;
+                    this.textContent = 'Tersalin, ayo bayar!';
+                    this.style.background = '#2E7D32';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.background = '#4CAF50';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Gagal menyalin, salinlah manual: ', err);
+                });
+            });
+        });
+
+        // Fungsi untuk modal QRIS
+        const modal = document.getElementById('qrisModal');
+        const qrisThumbnail = document.getElementById('qrisThumbnail');
+        const qrisFullSize = document.getElementById('qrisFullSize');
+        const closeBtn = document.getElementsByClassName('close')[0];
+
+        // Buka modal saat thumbnail QRIS diklik
+        qrisThumbnail.onclick = function() {
+            modal.style.display = 'flex';
+        }
+
+        // Tutup modal saat tombol close diklik
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Tutup modal saat area di luar gambar diklik
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
